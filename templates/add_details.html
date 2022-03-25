@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student Details</title>
+</head>
+
+<body>
+    <form method="post" action="/details_added" enctype="multipart/form-data">
+        <label> Full Name - <input type="text" name="full_name" placeholder="Enter Your Full Name" required></label>
+        <br><br>
+
+        <label> Email - <input type="email" name="email_id" placeholder="Enter Your Email-Id" required></label>
+         <br><br>
+        <label> Graduation Completed - </label>
+        <input type="radio" name="graduation_completed" value="Yes" required> Yes
+        <input type="radio" name="graduation_completed" value="No" required> No
+        <br><br>
+
+        <label> Stream -</label>
+        <input type="radio" name="stream" value="IT" required> IT
+        <input type="radio" name="stream" value="CS" required> CS
+        <input type="radio" name="stream" value="Electronics" required> Electronics
+        <input type="radio" name="stream" value="Mechanical" required> Mechanical
+        <input type="radio" name="stream" value="Civil" required> Civil <br> <br>
+
+        <label> CGPA - <input type="number" name="cgpa" step="0.01" max="10"
+                placeholder="Enter Your CGPA" required></label><br><br>
+        <label> Entrance Exam Score - <input type="number" max="250" name="entrance_exam_score"
+                placeholder="Enter Your Entrance Exam Score" required></label><br>
+        <br>
+
+
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>

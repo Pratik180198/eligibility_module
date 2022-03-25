@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Stages</title>
+	<style>
+		hidden {
+
+			display: none;
+
+		}
+	</style>
+	<script type="text/javascript">
+		function toggleTable() {
+			document.getElementById("mytable").classList.toggle("hidden");
+		}
+
+	</script>
+</head>
+
+<body>
+	<form method="post" enctype="multipart/form-data">
+		<label> Graduation Completed - </label>
+		<input type="radio" name="graduation_completed" required value="Yes"> Yes
+		<input type="radio" name="graduation_completed" required value="No"> No
+		<input type="radio" name="graduation_completed" required value="both"> Both
+		<br><br>
+
+		<table id="mytable" border>
+			<caption>Stage 1</caption>
+			<thead>
+				<tr>
+					<th>Full Name</th>
+					<th>Email ID</th>
+					<th>Graduation</th>
+					<th>Stream</th>
+					<th>CGPA</th>
+					<th>Entrance Marks</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				{% for detail in details %}
+				<tr>
+					<td>{{ detail.full_name}}</td>
+					<td>{{ detail.email_id}}</td>
+					<td>{{ detail.graduation_completed}}</td>
+					<td>{{ detail.stream}}</td>
+					<td>{{ detail.cgpa}}</td>
+					<td>{{ detail.entrance_exam_score}}</td>
+
+				</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+		<br><br>
+		<br><br>
+		<button onClick="toggleTable()">Open Table and Save the Data</button>
+	</form>
+</body>
+
+</html>
