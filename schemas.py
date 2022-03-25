@@ -46,3 +46,16 @@ class StageTwo(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class StageThree(BaseModel):
+    cgpa_one: float
+    cgpa_two: float
+
+    @classmethod
+    def as_form(cls, cgpa_one: float = Form(...),
+                cgpa_two: float = Form(...)):
+        return cls(cgpa_one=cgpa_one, cgpa_two=cgpa_two)
+
+    class Config:
+        orm_mode = True

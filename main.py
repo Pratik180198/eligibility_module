@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, status, HTTPException, Request, File, Uplo
 import pandas as pd
 from database import engine, get_db
 import models
-from schemas import UserDetails, StageOne, StageTwo
+from schemas import UserDetails, StageOne, StageTwo, StageThree
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -15,7 +15,7 @@ models.Base.metadata.create_all(bind=engine)
 
 
 @app.get('/upload_csv', response_class=HTMLResponse)
-def read(request: Request):
+def read_csv(request: Request):
     return templates.TemplateResponse("upload_csv.html", {"request": request})
 
 
@@ -151,3 +151,34 @@ def check_stream(request: Request, form_details: StageTwo = Depends(StageTwo.as_
             db.commit()
             db.refresh(new_details)
     return templates.TemplateResponse("stage_two.html", {"request": request, "details": details})
+
+
+@app.get('/stage_three', response_class=HTMLResponse)
+def read_stage_three(request: Request):
+    return templates.TemplateResponse("stage_three.html", {"request": request})
+
+
+@app.post('/stage_three')
+def check_cgpa(request: Request, form_details: StageThree = Depends(StageThree.as_form), db: Session = Depends(get_db)):
+    # print(form_details.cgpa_one,form_details.cgpa_two)
+    details = db.query(models.StageTwoTable).filter(
+        models.StageTwoTable.cgpa.between(cleft=form_details.cgpa_one, cright=form_details.cgpa_two)).all()
+    # return details
+    db.query(models.StageThreeTable).delete()
+    db.commit()
+
+    for detail in details:
+        if db.query(models.StageThreeTable).filter(models.StageThreeTable.email_id == detail.email_id).first():
+            pass
+        else:
+            new_details = models.StageThreeTable(id=detail.id,
+                                                 full_name=detail.full_name,
+                                                 email_id=detail.email_id,
+                                                 graduation_completed=detail.graduation_completed,
+                                                 stream=detail.stream, cgpa=detail.cgpa,
+                                                 entrance_exam_score=detail.entrance_exam_score)
+
+            db.add(new_details)
+            db.commit()
+            db.refresh(new_details)
+    return templates.TemplateResponse("stage_three.html", {"request": request, "details": details})
