@@ -6,6 +6,7 @@ from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+import smtplib
 
 app = FastAPI()
 
@@ -215,3 +216,31 @@ def check_entrance_exam(request: Request, form_details: StageFour = Depends(Stag
             db.commit()
             db.refresh(new_details)
     return templates.TemplateResponse("stage_four.html", {"request": request, "details": details})
+
+
+@app.get('/upload_email', response_class=HTMLResponse)
+def read_csv(request: Request):
+    return templates.TemplateResponse("upload_email.html", {"request": request})
+
+
+@app.post('/send_email')
+def send_mail(db: Session = Depends(get_db)):
+    details = db.query(models.StageFourTable).all()
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.ehlo()
+        server.starttls()
+        server.login("eligibiltymodule@gmail.com", "Pratik@2022")
+        for detail in details:
+            subject = "Eligibility Module"
+            msg = f"Congratulations {detail.full_name} you have cleared the eligibility criteria."
+            message = f"Subject: {subject}\n\n{msg}"
+            server.sendmail("eligibiltymodule@gmail.com", detail.email_id, message)
+        server.quit()
+        return "Email Send Successfully"
+
+    except smtplib.SMTPResponseException as e:
+        error_code = e.smtp_code
+        error_message = e.smtp_error
+        return error_code, error_message
