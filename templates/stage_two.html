@@ -10,6 +10,31 @@
 			display: none;
 		}
 
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		
+		th {
+			background-color: #000000;
+			color: rgb(253, 253, 253);
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+
+
+		td {
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+		tr:hover {
+			background-color: coral;
+		}
 	</style>
 	<script type="text/javascript">
 
@@ -41,7 +66,7 @@
 		<input type="checkbox" name="stream" value="Mechanical">Mechanical<br>
 		<input type="checkbox" name="stream" value="Civil">Civil<br>
 
-		<table id="mytable" border>
+		<table id="mytable">
 			<caption>Stage 2</caption>
 			<thead>
 				<tr>

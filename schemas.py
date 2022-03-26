@@ -59,3 +59,16 @@ class StageThree(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class StageFour(BaseModel):
+    ent_one: int
+    ent_two: int
+
+    @classmethod
+    def as_form(cls, ent_one: int = Form(...),
+                ent_two: int = Form(...)):
+        return cls(ent_one=ent_one, ent_two=ent_two)
+
+    class Config:
+        orm_mode = True

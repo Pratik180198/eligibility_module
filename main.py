@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, status, HTTPException, Request, File, Uplo
 import pandas as pd
 from database import engine, get_db
 import models
-from schemas import UserDetails, StageOne, StageTwo, StageThree
+from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -45,7 +45,7 @@ def read(request: Request):
 
 @app.post('/details_added', status_code=status.HTTP_201_CREATED, response_class=HTMLResponse)
 def add_details(form_data: UserDetails = Depends(UserDetails.as_form), db: Session = Depends(get_db)):
-    new_details = models.StudentTable(full_name=form_data.full_name,
+    new_details = models.StudentTable(full_name=form_data.full_name.strip(),
                                       email_id=form_data.email_id,
                                       graduation_completed=form_data.graduation_completed,
                                       stream=form_data.stream, cgpa=form_data.cgpa,
@@ -182,3 +182,36 @@ def check_cgpa(request: Request, form_details: StageThree = Depends(StageThree.a
             db.commit()
             db.refresh(new_details)
     return templates.TemplateResponse("stage_three.html", {"request": request, "details": details})
+
+
+@app.get('/stage_four', response_class=HTMLResponse)
+def read_stage_four(request: Request):
+    return templates.TemplateResponse("stage_four.html", {"request": request})
+
+
+@app.post('/stage_four')
+def check_entrance_exam(request: Request, form_details: StageFour = Depends(StageFour.as_form),
+                        db: Session = Depends(get_db)):
+    # print(form_details.ent_one,form_details.ent_two)
+    details = db.query(models.StageThreeTable).filter(
+        models.StageThreeTable.entrance_exam_score.between(cleft=form_details.ent_one,
+                                                           cright=form_details.ent_two)).all()
+
+    db.query(models.StageFourTable).delete()
+    db.commit()
+
+    for detail in details:
+        if db.query(models.StageFourTable).filter(models.StageFourTable.email_id == detail.email_id).first():
+            pass
+        else:
+            new_details = models.StageFourTable(id=detail.id,
+                                                full_name=detail.full_name,
+                                                email_id=detail.email_id,
+                                                graduation_completed=detail.graduation_completed,
+                                                stream=detail.stream, cgpa=detail.cgpa,
+                                                entrance_exam_score=detail.entrance_exam_score)
+
+            db.add(new_details)
+            db.commit()
+            db.refresh(new_details)
+    return templates.TemplateResponse("stage_four.html", {"request": request, "details": details})
