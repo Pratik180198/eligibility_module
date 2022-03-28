@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data Added Successfully</title>
+
+    <link href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="wrapper">
+			<div class="inner">
+    <form method="post" enctype="multipart/form-data">
+        <h3>{{ details }}</h3>
+
+    </form>
+            </div>
+</div>
+
+</body>
+
+</html>

@@ -6,9 +6,12 @@ from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 import smtplib
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates/")
 
@@ -21,9 +24,19 @@ def read_csv(request: Request):
 
 
 @app.post('/submit_csv')
-def handle_csv(csvfile: UploadFile = File(...), db: Session = Depends(get_db)):
+def handle_csv(request: Request, csvfile: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
         df = pd.read_csv(csvfile.file)
+        header_list = ['id', 'full_name', 'email_id', 'graduation_completed', 'stream', 'cgpa', 'entrance_exam_score']
+        flag = False
+        for column in df.columns:
+            for header_column in header_list:
+                if header_column == column:
+                    flag = True
+
+        if not flag:
+            return templates.TemplateResponse("success.html", {"request": request, "details": "Invalid CSV File"})
+
         for index, row in df.iterrows():
             if db.query(models.StudentTable).filter(models.StudentTable.email_id == row.email_id).first():
                 pass
@@ -34,7 +47,7 @@ def handle_csv(csvfile: UploadFile = File(...), db: Session = Depends(get_db)):
                     "VALUES (%s, %s, %s, %s, %s, %s)",
                     row.full_name, row.email_id, row.graduation_completed, row.stream, row.cgpa,
                     row.entrance_exam_score)
-        return "CSV uploaded successfully"
+        return templates.TemplateResponse("success.html", {"request": request, "details": "CSV uploaded successfully"})
     except Exception as e:
         return e
 
@@ -45,7 +58,7 @@ def read(request: Request):
 
 
 @app.post('/details_added', status_code=status.HTTP_201_CREATED, response_class=HTMLResponse)
-def add_details(form_data: UserDetails = Depends(UserDetails.as_form), db: Session = Depends(get_db)):
+def add_details(request: Request, form_data: UserDetails = Depends(UserDetails.as_form), db: Session = Depends(get_db)):
     new_details = models.StudentTable(full_name=form_data.full_name.strip(),
                                       email_id=form_data.email_id,
                                       graduation_completed=form_data.graduation_completed,
@@ -54,7 +67,7 @@ def add_details(form_data: UserDetails = Depends(UserDetails.as_form), db: Sessi
     db.add(new_details)
     db.commit()
     db.refresh(new_details)
-    return "Data added successfully"
+    return templates.TemplateResponse("success.html", {"request": request, "details": "Data Added Successfully"})
 
 
 @app.get('/get_details')

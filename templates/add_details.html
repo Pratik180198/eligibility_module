@@ -4,36 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Student Details</title>
+
+    <link
+        href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
+        rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+
 </head>
 
 <body>
-    <form method="post" action="/details_added" enctype="multipart/form-data">
-        <label> Full Name - <input type="text" name="full_name" placeholder="Enter Your Full Name" required></label>
-        <br><br>
+    <div class="wrapper">
+        <div class="inner">
+            <form method="post" action="/details_added" enctype="multipart/form-data">
+                <h3>Add Details</h3>
+                <label class="form-group">
+                    <input type="text" class="form-control" name="full_name" required>
+                    <span>Full Name</span>
+                    <span class="border"></span>
+                </label>
 
-        <label> Email - <input type="email" name="email_id" placeholder="Enter Your Email-Id" required></label>
-         <br><br>
-        <label> Graduation Completed - </label>
-        <input type="radio" name="graduation_completed" value="Yes" required> Yes
-        <input type="radio" name="graduation_completed" value="No" required> No
-        <br><br>
+                <label class="form-group">
+                    <input type="email" class="form-control" name="email_id" required>
+                    <span>Email</span>
+                    <span class="border"></span>
+                </label>
 
-        <label> Stream -</label>
-        <input type="radio" name="stream" value="IT" required> IT
-        <input type="radio" name="stream" value="CS" required> CS
-        <input type="radio" name="stream" value="Electronics" required> Electronics
-        <input type="radio" name="stream" value="Mechanical" required> Mechanical
-        <input type="radio" name="stream" value="Civil" required> Civil <br> <br>
+                <label class="form-group">
+                    <span>Graduation Completed : </span>
+                    <span class="border"></span>
+                    <br>
+                    <br>
 
-        <label> CGPA - <input type="number" name="cgpa" step="0.01" min="1" max="10"
-                placeholder="Enter Your CGPA" required></label><br><br>
-        <label> Entrance Exam Score - <input type="number" min="0" max="250" name="entrance_exam_score"
-                placeholder="Enter Your Entrance Exam Score" required></label><br>
-        <br>
+                    <input type="radio" name="graduation_completed" value="Yes" required> Yes
+                    <input type="radio" name="graduation_completed" value="No" required> No
+                </label>
+
+                <label class="form-group">
+                    <span>Stream : </span>
+                    <span class="border"></span>
+                    <br>
+                    <br>
+                    <input type="radio" name="stream" value="IT" required> IT
+                    <input type="radio" name="stream" value="CS" required> CS
+                    <input type="radio" name="stream" value="Electronics" required> Electronics
+                    <input type="radio" name="stream" value="Mechanical" required> Mechanical
+                    <input type="radio" name="stream" value="Civil" required> Civil
+                </label>
+
+                <label class="form-group">
+                    <input type="number" class="form-control" name="cgpa" step="0.01" min="1" max="10" required>
+                    <span>CGPA</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <input type="number" class="form-control" min="0" max="250" name="entrance_exam_score" required>
+                    <span>Entrance Exam Score </span>
+                    <span class="border"></span>
+                </label>
 
 
-        <input type="submit">
-    </form>
+                <button>Submit <i class="zmdi zmdi-arrow-right"></i> </button>
+            </form>
+        </div>
+    </div>
 
 </body>
 
