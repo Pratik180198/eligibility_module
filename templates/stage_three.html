@@ -47,7 +47,6 @@
 		<form method="post" enctype="multipart/form-data">
 			<br>
 			<h3> Stage Three - CGPA </h3>
-
 			<label> Enter CGPA range between - <input type="number" id="c1" name="cgpa_one" step="0.01" min="1" max="10"
 					required> &nbsp; and &nbsp;
 				<input type="number" id="c2" required name="cgpa_two" step="0.01" min="1" max="10"></label><br><br>
@@ -85,8 +84,33 @@
 			<br>
 
 			<button class="btn btn-primary" id="checkBtn">Open Table and Save the Data</button>
+			<br>
+			<br>
+			<button formmethod="get" onclick="window.location.href='http://127.0.0.1:8000/stage_four'" class="btn btn-success" id="submit">Next Stage</button>
+
 		</form>
 	</div>
+<script>
+
+		$(document).ready(function () {
+			function ButtonHandler() {
+
+				var rowCount = document.getElementById("mytable").rows.length;
+				console.log(rowCount)
+				if (rowCount <= 1) {
+					$('#submit').attr('disabled', 'disabled');
+				} else {
+					$('#submit').removeAttr('disabled');
+				}
+			}
+
+			ButtonHandler()
+
+			$('YourBtn').click(function () {
+				ButtonHandler()
+			});
+		});
+	</script>
 </body>
 
 </html>

@@ -85,9 +85,34 @@
 			<br>
 
 			<button class="btn btn-primary" id="checkBtn">Open Table and Save the Data</button>
+			<br>
+			<br>
+			<button formmethod="get" onclick="window.location.href='http://127.0.0.1:8000/upload_email'" class="btn btn-success" id="submit">Next</button>
+
 
 		</form>
 	</div>
+<script>
+
+		$(document).ready(function () {
+			function ButtonHandler() {
+
+				var rowCount = document.getElementById("mytable").rows.length;
+				console.log(rowCount)
+				if (rowCount <= 1) {
+					$('#submit').attr('disabled', 'disabled');
+				} else {
+					$('#submit').removeAttr('disabled');
+				}
+			}
+
+			ButtonHandler()
+
+			$('YourBtn').click(function () {
+				ButtonHandler()
+			});
+		});
+	</script>
 </body>
 
 </html>
