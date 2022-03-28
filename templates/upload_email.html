@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
+        rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
     <title>Send Mail</title>
 </head>
+
 <body>
+    <div class="wrapper">
+        <div class="inner">
 
-        <form method="post" action="/send_email" enctype="multipart/form-data">
-            <h2>Send Mail to students who had cleared the Eligibility Stages </h2>
-            <br>
-            <input type="submit">
+            <form method="post" action="/send_email" enctype="multipart/form-data">
+                <h3> Send Mail to students who had cleared or not cleared the Eligibility Stages </h3>
+                <br>
+                <button>Send <i class="zmdi zmdi-arrow-right"></i> </button>
 
-        </form>
-
+            </form>
+        </div>
+    </div>
 </body>
 </html>

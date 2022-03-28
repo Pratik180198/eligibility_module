@@ -23,31 +23,25 @@
 
 
 </head>
-
 <body>
     <div class="wrapper">
         <div class="inner">
             <form method="post" action="/submit_csv" enctype="multipart/form-data">
                 <h3> CSV File Upload</h3>
                 <label class="form-group">
-                    <br>
-                    <br>
-                    <input type="file" class="form-group" id="customFile" name="csvfile" accept=".csv" required />
                     <span>Upload File</span>
                     <span class="border"></span>
+                    <br>
+                    <br>
+                    <input type="file" name="csvfile" accept=".csv" required />
+
                 </label>
-
-
-
 
                 <!--            <input type="file" name="csvfile" accept=".csv" required>-->
                 <br>
                 <button>Submit <i class="zmdi zmdi-arrow-right"></i> </button>
-
             </form>
         </div>
-
     </div>
 </body>
-
 </html>

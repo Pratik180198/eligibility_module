@@ -1,13 +1,17 @@
-from fastapi import FastAPI, Depends, status, HTTPException, Request, File, UploadFile
+import smtplib
 import pandas as pd
-from database import engine, get_db
-import models
-from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
-from sqlalchemy.orm import Session
-from fastapi.templating import Jinja2Templates
+from dotenv import load_dotenv
+from fastapi import FastAPI, Depends, status, HTTPException, Request, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-import smtplib
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+import models
+import os
+from database import engine, get_db
+from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -16,6 +20,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates/")
 
 models.Base.metadata.create_all(bind=engine)
+
+
+@app.get('/index', response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get('/upload_csv', response_class=HTMLResponse)
@@ -237,23 +246,40 @@ def read_csv(request: Request):
 
 
 @app.post('/send_email')
-def send_mail(db: Session = Depends(get_db)):
+def send_mail(request: Request, db: Session = Depends(get_db)):
     details = db.query(models.StageFourTable).all()
+    all_student_details = db.query(models.StudentTable).all()
+
+    stage_four_email = [detail.email_id for detail in details]
+
+    email_add = os.getenv("EMAIL_ADD")
+    password = os.getenv("PASSWORD")
 
     try:
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo()
         server.starttls()
-        server.login("eligibiltymodule@gmail.com", "Pratik@2022")
+        server.login(email_add, password)
         for detail in details:
             subject = "Eligibility Module"
             msg = f"Congratulations {detail.full_name} you have cleared the eligibility criteria."
             message = f"Subject: {subject}\n\n{msg}"
-            server.sendmail("eligibiltymodule@gmail.com", detail.email_id, message)
+            server.sendmail(email_add, detail.email_id, message)
+
+        for detail in all_student_details:
+            if detail.email_id not in stage_four_email:
+                # print(detail.email_id)
+                subject = "Eligibility Module"
+                msg = f"Hey {detail.full_name} we are really sorry that you are not eligible for Eligibility process."
+                message = f"Subject: {subject}\n\n{msg}"
+                server.sendmail(email_add, detail.email_id, message)
+
         server.quit()
-        return "Email Send Successfully"
+        return templates.TemplateResponse("success.html", {"request": request, "details": "Email Send Successfully"})
 
     except smtplib.SMTPResponseException as e:
         error_code = e.smtp_code
         error_message = e.smtp_error
-        return error_code, error_message
+        # return error_code, error_message
+        return templates.TemplateResponse("success.html", {"request": request,
+                                                           "details": f"Error Occurred - {error_code}:{error_message}"})
