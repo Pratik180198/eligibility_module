@@ -1,7 +1,7 @@
 import smtplib
 import pandas as pd
 from dotenv import load_dotenv
-from fastapi import FastAPI, Depends, status, HTTPException, Request, File, UploadFile
+from fastapi import FastAPI, Depends, status, HTTPException, Request, File, UploadFile, Response
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -10,6 +10,7 @@ import models
 import os
 from database import engine, get_db
 from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour
+from fpdf import FPDF
 
 load_dotenv()
 
@@ -37,11 +38,13 @@ def handle_csv(request: Request, csvfile: UploadFile = File(...), db: Session = 
     try:
         df = pd.read_csv(csvfile.file)
         header_list = ['id', 'full_name', 'email_id', 'graduation_completed', 'stream', 'cgpa', 'entrance_exam_score']
-        flag = False
+        flag = None
         for column in df.columns:
             for header_column in header_list:
                 if header_column == column:
                     flag = True
+                else:
+                    flag = False
 
         if not flag:
             return templates.TemplateResponse("success.html", {"request": request, "details": "Invalid CSV File"})
@@ -283,3 +286,48 @@ def send_mail(request: Request, db: Session = Depends(get_db)):
         # return error_code, error_message
         return templates.TemplateResponse("success.html", {"request": request,
                                                            "details": f"Error Occurred - {error_code}:{error_message}"})
+
+
+@app.post('/pdf')
+def generate_pdf(db: Session = Depends(get_db)):
+    details = db.query(models.StageFourTable).all()
+    pdf = FPDF()
+    pdf.add_page()
+
+    page_width = pdf.w - 2 * pdf.l_margin
+
+    pdf.set_font('Times', 'B', 22)
+    pdf.cell(page_width, 0.0, 'Eligibility Report', align='C')
+    pdf.ln(10)
+
+    pdf.set_font('Arial', '', 12)
+
+    pdf.ln(1)
+
+    th = pdf.font_size
+
+    pdf.cell(35, th, "Full Name", border=1, align='C')
+    pdf.cell(55, th, "Email ID", border=1, align='C')
+    pdf.cell(30, th, "Graduation", border=1, align='C')
+    pdf.cell(25, th, "Stream", border=1, align='C')
+    pdf.cell(15, th, "CGPA", border=1, align='C')
+    pdf.cell(35, th, "Entrance Marks", border=1, align='C')
+
+    pdf.ln(5)
+
+    for row in details:
+        pdf.set_font('Arial', '', 10)
+        pdf.cell(35, th, row.full_name, border=1)
+        pdf.cell(55, th, row.email_id, border=1)
+        pdf.cell(30, th, row.graduation_completed, border=1, align='C')
+        pdf.cell(25, th, row.stream, border=1, align='C')
+        pdf.cell(15, th, str(row.cgpa), border=1, align='C')
+        pdf.cell(35, th, str(row.entrance_exam_score), border=1, align='C')
+        pdf.ln(th)
+
+    pdf.ln(10)
+    pdf.set_font('Times', '', 10.0)
+    pdf.cell(page_width, 0.0, '- end of report -', align='C')
+
+    return Response(pdf.output(dest='S').encode('latin-1'), media_type='application.pdf',
+                    headers={'Content-Disposition': 'attachment; filename=Eligibility.pdf'})

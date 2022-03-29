@@ -15,10 +15,12 @@
     <div class="wrapper">
         <div class="inner">
 
-            <form method="post" action="/send_email" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <h3> Send Mail to students who had cleared or not cleared the Eligibility Stages </h3>
-                <br>
-                <button>Send <i class="zmdi zmdi-arrow-right"></i> </button>
+
+                <button formaction="/send_email">Send <i class="zmdi zmdi-arrow-right"></i> </button>
+                <button formaction="/pdf">Download PDF<i class="zmdi zmdi"></i> </button>
+                <button formmethod="get" formaction="/index">Home Page <i class="zmdi zmdi-arrow-left"></i> </button>
 
             </form>
         </div>
