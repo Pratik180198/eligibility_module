@@ -1,1 +1,1 @@
-web: gunicorn
+web: gunicorn -w 3 -k uvicorn.workers.UvicornWorker Eligibility_Module.main:app
