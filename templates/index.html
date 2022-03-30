@@ -19,9 +19,21 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ url_for('static', path='index/css/styles.css') }}" rel="stylesheet">
+    <script>
+        function check() {
+            var token = localStorage.getItem("email");
+            // console.log(localStorage.getItem("email"));
+            //     var token = SessionStorage.getItem("email");
+            //     console.log(SessionStorage.getItem("email"));
+
+            if (token === null) {
+                window.location.replace("http://127.0.0.1:8000/login");
+            }
+        }
+    </script>
 </head>
 
-<body id="page-top">
+<body onload="check();" id="page-top">
     <form method="get" enctype="multipart/form-data">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
@@ -34,7 +46,8 @@
                         <li class="nav-item"><a class="nav-link" href="/upload_csv">Upload File</a></li>
                         <li class="nav-item"><a class="nav-link" href="/add_details">Add Details</a></li>
                         <li class="nav-item"><a class="nav-link" href="/stage_one">Stages</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li> -->
+                        <li class="nav-item"><a class="nav-link" href="/delete">Reset Data</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="logout();">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,6 +77,15 @@
                 <div class="small text-center text-muted">Copyright &copy; 2022 - Eligibility Module</div>
             </div>
         </footer>
+        <script>
+            function logout() {
+                window.localStorage.clear();
+                alert('You are about to Logout');
+                window.location.replace("http://127.0.0.1:8000/login");
+            }
+        </script>
+
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- SimpleLightbox plugin JS-->
@@ -74,8 +96,7 @@
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <!--        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>-->
     </form>
 </body>
-
 </html>

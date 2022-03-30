@@ -6,22 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Added Successfully</title>
 
-    <link href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+    <link
+        href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
+        rel="stylesheet">
     <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+
+    <script>
+        function check() {
+            var token = localStorage.getItem("email");
+            // console.log(localStorage.getItem("email"));
+            //     var token = SessionStorage.getItem("email");
+            //     console.log(SessionStorage.getItem("email"));
+
+            if (token === null) {
+                window.location.replace("http://127.0.0.1:8000/login");
+            }
+        }
+    </script>
 
 </head>
 
-<body>
-<div class="wrapper">
-			<div class="inner">
-    <form method="post" enctype="multipart/form-data">
-        <h3>{{ details }}</h3>
+<body onload="check();">
+    <div class="wrapper">
+        <div class="inner">
+            <form method="post" enctype="multipart/form-data">
+                <h3>{{ details }}</h3>
 
-        <button formmethod="get" formaction="/index">Home Page <i class="zmdi zmdi-arrow-left"></i> </button>
+                <button formmethod="get" formaction="/index">Home Page <i class="zmdi zmdi-arrow-left"></i> </button>
 
-    </form>
-            </div>
-</div>
+            </form>
+        </div>
+    </div>
 
 </body>
 

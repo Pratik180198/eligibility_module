@@ -9,11 +9,19 @@
     <link href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
         rel="stylesheet">
     <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+    <script>
+    function check() {
+                var token = localStorage.getItem("email");
+<!--                console.log(localStorage.getItem("email"));-->
+//              console.log(token);
+                        if (token === null){
+                            window.location.replace("http://127.0.0.1:8000/login");
+    }
+}</script>
 
 </head>
 
-<body>
-
+<body onload="check();">
     <div class="wrapper">
         <div class="inner">
             <form method="post" action="/details_added" enctype="multipart/form-data">

@@ -72,3 +72,16 @@ class StageFour(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Admin(BaseModel):
+    email: str
+    password: str
+
+    @classmethod
+    def as_form(cls, email: str = Form(...),
+                password: str = Form(...)):
+        return cls(email=email, password=password)
+
+    class Config:
+        orm_mode = True

@@ -1,7 +1,6 @@
 from database import Base
 from sqlalchemy import Column, Integer, String, Float
 
-
 class StudentTable(Base):
     __tablename__ = 'students'
     id = Column(Integer, primary_key=True, index=True)
@@ -55,3 +54,9 @@ class StageFourTable(Base):
     stream = Column(String(30))
     cgpa = Column(Float(10))
     entrance_exam_score = Column(Integer)
+
+
+class AdminLogin(Base):
+    __tablename__ = 'admin_login'
+    email = Column(String(50), primary_key=True)
+    password = Column(String(30))

@@ -9,9 +9,22 @@
         rel="stylesheet">
     <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
     <title>Send Mail</title>
+
+    <script>
+        function check() {
+            var token = localStorage.getItem("email");
+            // console.log(localStorage.getItem("email"));
+            //     var token = SessionStorage.getItem("email");
+            //     console.log(SessionStorage.getItem("email"));
+
+            if (token === null) {
+                window.location.replace("http://127.0.0.1:8000/login");
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body onload="check();">
     <div class="wrapper">
         <div class="inner">
 
@@ -26,4 +39,5 @@
         </div>
     </div>
 </body>
+
 </html>

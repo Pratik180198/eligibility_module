@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
+        rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+
+</head>
+
+{{detail}}
+
+<body>
+    <div class="wrapper">
+        <div class="inner">
+            <form id="formElem" method="post" action="/login" enctype="multipart/form-data">
+                <h3>Admin Login</h3>
+                <label class="form-group">
+                    <input id="email" type="email" class="form-control" name="email" required>
+                    <span>Email</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <input id="password" type="password" class="form-control" name="password" required>
+                    <span>Password</span>
+                    <span class="border"></span>
+                </label>
+                <button type="submit">Submit <i class="zmdi zmdi-arrow-right"></i> </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        sessionStorage.clear();
+        formElem.onsubmit = async (e) => {
+            e.preventDefault();
+            let response = await fetch('http://127.0.0.1:8000/login', {
+                method: 'POST',
+                body: new FormData(formElem)
+            })
+            console.log(response['status']);
+            if (response['status'] == 200) {
+                var form = document.querySelector("#formElem");
+
+                email = form.querySelector('input[name="email"]').value;
+                // sessionStorage.setItem("email", email);
+                // console.log(sessionStorage.getItem("email"));
+                window.localStorage.setItem("email", email);
+                // console.log(localStorage.getItem("email"));
+                window.location.href = 'http://127.0.0.1:8000/index';
+
+            }
+            else {
+                alert('Invalid credentials');
+            }
+        };
+    </script>
+</body>
+</html>

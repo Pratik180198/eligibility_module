@@ -43,9 +43,22 @@
 
 			});
 		});
+
+		function check() {
+            var token = localStorage.getItem("email");
+            // console.log(localStorage.getItem("email"));
+            //     var token = SessionStorage.getItem("email");
+            //     console.log(SessionStorage.getItem("email"));
+
+            if (token === null) {
+                window.location.replace("http://127.0.0.1:8000/login");
+            }
+        }
+
 	</script>
 </head>
-<body>
+
+<body onload="check();">
 	<div class="container">
 		<form method="post" enctype="multipart/form-data">
 			<br>
@@ -88,11 +101,11 @@
 			</div>
 			<br>
 			<!--			<button class="btn btn-primary" onClick="toggleTable()">Open Table and Save the Data</button>-->
-			<button  class="btn btn-primary" id="checkBtn">Open Table and Save the Data</button>
+			<button class="btn btn-primary" id="checkBtn">Open Table and Save the Data</button>
 			<br>
 			<br>
 
-			<button class="btn btn-success" formmethod="get" formaction="/stage_two" id="submit" >Next Stage</button>
+			<button class="btn btn-success" formmethod="get" formaction="/stage_two" id="submit">Next Stage</button>
 
 
 		</form>
@@ -121,4 +134,5 @@
 		});
 	</script>
 </body>
+
 </html>
