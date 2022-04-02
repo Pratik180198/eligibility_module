@@ -49,8 +49,10 @@
                         <li class="nav-item"><a class="nav-link" href="/upload_csv">Upload File</a></li>
                         <li class="nav-item"><a class="nav-link" href="/add_details">Add Details</a></li>
                         <li class="nav-item"><a class="nav-link" href="/stage_one">Stages</a></li>
-                        <li class="nav-item"><a class="nav-link" href="" onclick="return delete_data();">Reset Data</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login" onclick= "return logout();">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="" onclick="return delete_data();">Reset Data</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/login" onclick="return logout();">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -82,36 +84,36 @@
         </footer>
         <script>
 
-        function callApi(method, url){
-         $.ajax({
+            function callApi(method, url) {
+                $.ajax({
 
                     method: method,
                     url: url
-                    }).done(function(msg){
-                        alert("Data Deleted Successfully");
-                    })
-         }
+                }).done(function (msg) {
+                    alert("Data Deleted Successfully");
+                })
+            }
 
             function logout() {
                 var isLogout = confirm('Are you sure to Logout');
-                if (isLogout){
-                        window.localStorage.clear();
-                        return True;
-                        }
-                 return false;
+                if (isLogout) {
+                    window.localStorage.clear();
+                    return True;
+                }
+                return false;
 
-               // window.location.replace("http://127.0.0.1:8000/login");
+                // window.location.replace("http://127.0.0.1:8000/login");
             }
 
-            function delete_data(){
-            var isDelete = confirm('Are you sure to delete all the data');
-            if (isDelete){
+            function delete_data() {
+                var isDelete = confirm('Are you sure to delete all the data');
+                if (isDelete) {
 
-                callApi("DELETE",'/delete')
-                return True
+                    callApi("DELETE", '/delete')
+                    return True
 
-            }
-            return false;
+                }
+                return false;
             }
         </script>
 
@@ -129,4 +131,5 @@
         <!--        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>-->
     </form>
 </body>
+
 </html>
