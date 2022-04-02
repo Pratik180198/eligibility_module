@@ -19,7 +19,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ url_for('static', path='index/css/styles.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     <script>
+
+
         function check() {
             var token = localStorage.getItem("email");
             // console.log(localStorage.getItem("email"));
@@ -46,8 +49,8 @@
                         <li class="nav-item"><a class="nav-link" href="/upload_csv">Upload File</a></li>
                         <li class="nav-item"><a class="nav-link" href="/add_details">Add Details</a></li>
                         <li class="nav-item"><a class="nav-link" href="/stage_one">Stages</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/delete">Reset Data</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="logout();">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="" onclick="return delete_data();">Reset Data</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login" onclick= "return logout();">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -78,10 +81,37 @@
             </div>
         </footer>
         <script>
+
+        function callApi(method, url){
+         $.ajax({
+
+                    method: method,
+                    url: url
+                    }).done(function(msg){
+                        alert("Data Deleted Successfully");
+                    })
+         }
+
             function logout() {
-                window.localStorage.clear();
-                alert('You are about to Logout');
-                window.location.replace("http://127.0.0.1:8000/login");
+                var isLogout = confirm('Are you sure to Logout');
+                if (isLogout){
+                        window.localStorage.clear();
+                        return True;
+                        }
+                 return false;
+
+               // window.location.replace("http://127.0.0.1:8000/login");
+            }
+
+            function delete_data(){
+            var isDelete = confirm('Are you sure to delete all the data');
+            if (isDelete){
+
+                callApi("DELETE",'/delete')
+                return True
+
+            }
+            return false;
             }
         </script>
 

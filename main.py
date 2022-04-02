@@ -6,13 +6,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 import models
-# from dotenv import load_dotenv
-# import os
+from dotenv import load_dotenv
+import os
 from database import engine, get_db
 from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour, Admin
 from fpdf import FPDF
 
-# load_dotenv()
+load_dotenv()
 
 app = FastAPI()
 
@@ -29,16 +29,16 @@ def home(request: Request):
 
 
 @app.post('/login')
-def login(requests: Request, request: Admin = Depends(Admin.as_form), db: Session = Depends(get_db)):
-    admin = db.query(models.AdminLogin).filter(models.AdminLogin.email == request.email).first()
+def login(request: Request, form_data: Admin = Depends(Admin.as_form), db: Session = Depends(get_db)):
+    admin = db.query(models.AdminLogin).filter(models.AdminLogin.email == form_data.email).first()
 
     if not admin:
         return Response(status_code=404)
 
-    if not (admin.password == request.password):
+    if not (admin.password == form_data.password):
         return Response(status_code=404)
 
-    return templates.TemplateResponse("index.html", {"request": requests, "detail": request.email})
+    return templates.TemplateResponse("index.html", {"request": request, "detail": form_data.email})
 
 
 @app.get('/index', response_class=HTMLResponse)
@@ -100,10 +100,10 @@ def add_details(request: Request, form_data: UserDetails = Depends(UserDetails.a
     return templates.TemplateResponse("success.html", {"request": request, "details": "Data Added Successfully"})
 
 
-# @app.get('/get_details')
-# def get_details(db: Session = Depends(get_db)):
-#     get_data = db.query(models.StudentTable).all()
-#     return get_data
+@app.get('/get_details')
+def get_details(db: Session = Depends(get_db)):
+    get_data = db.query(models.StudentTable).all()
+    return get_data
 
 
 @app.get('/stage_one', response_class=HTMLResponse)
@@ -273,10 +273,10 @@ def send_mail(request: Request, db: Session = Depends(get_db)):
 
     stage_four_email = [detail.email_id for detail in details]
 
-    # email_add = os.getenv("EMAIL_ADD")
-    # password = os.getenv("PASSWORD")
-    email_add = "eligibiltymodule@gmail.com"
-    password = "Pratik@2022"
+    email_add = os.getenv("EMAIL_ADD")
+    password = os.getenv("PASSWORD")
+    # email_add = "eligibiltymodule@gmail.com"
+    # password = "Pratik@2022"
 
     try:
         server = smtplib.SMTP('smtp.gmail.com:587')
@@ -353,8 +353,8 @@ def generate_pdf(db: Session = Depends(get_db)):
                     headers={'Content-Disposition': 'attachment; filename=Eligibility.pdf'})
 
 
-@app.get('/delete')
-def empty(request: Request):
-    engine.execute("TRUNCATE TABLE demo_fastapi.students")
-    return templates.TemplateResponse("success.html",
-                                      {"request": request, "details": "All records are delete from table"})
+@app.delete('/delete')
+def empty(db: Session = Depends(get_db)):
+    db.query(models.StudentTable).delete()
+    db.commit()
+

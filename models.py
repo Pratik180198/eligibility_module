@@ -1,6 +1,7 @@
 from database import Base
 from sqlalchemy import Column, Integer, String, Float
 
+
 class StudentTable(Base):
     __tablename__ = 'students'
     id = Column(Integer, primary_key=True, index=True)
