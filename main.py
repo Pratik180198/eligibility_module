@@ -101,9 +101,9 @@ def add_details(request: Request, form_data: UserDetails = Depends(UserDetails.a
 
 
 @app.get('/get_details')
-def get_details(db: Session = Depends(get_db)):
+def get_details(request: Request, db: Session = Depends(get_db)):
     get_data = db.query(models.StudentTable).all()
-    return get_data
+    return templates.TemplateResponse("get_details.html", {"request": request, "details": get_data})
 
 
 @app.get('/stage_one', response_class=HTMLResponse)
