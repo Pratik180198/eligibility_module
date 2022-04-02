@@ -275,8 +275,6 @@ def send_mail(request: Request, db: Session = Depends(get_db)):
 
     email_add = os.getenv("EMAIL_ADD")
     password = os.getenv("PASSWORD")
-    # email_add = "eligibiltymodule@gmail.com"
-    # password = "Pratik@2022"
 
     try:
         server = smtplib.SMTP('smtp.gmail.com:587')
@@ -357,4 +355,3 @@ def generate_pdf(db: Session = Depends(get_db)):
 def empty(db: Session = Depends(get_db)):
     db.query(models.StudentTable).delete()
     db.commit()
-
