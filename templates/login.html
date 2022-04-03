@@ -39,7 +39,7 @@
         sessionStorage.clear();
         formElem.onsubmit = async (e) => {
             e.preventDefault();
-            let response = await fetch('http://127.0.0.1:8000/login', {
+            let response = await fetch('/login', {
                 method: 'POST',
                 body: new FormData(formElem)
             })
@@ -52,7 +52,7 @@
                 // console.log(sessionStorage.getItem("email"));
                 window.localStorage.setItem("email", email);
                 // console.log(localStorage.getItem("email"));
-                window.location.href = 'http://127.0.0.1:8000/index';
+                window.location.href = '/index';
 
             }
             else {
