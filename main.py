@@ -24,6 +24,11 @@ templates = Jinja2Templates(directory="templates/")
 models.Base.metadata.create_all(bind=engine)
 
 
+@app.get('/', response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
 @app.get('/login', response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
