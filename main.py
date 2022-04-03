@@ -9,7 +9,7 @@ import models
 from dotenv import load_dotenv
 import os
 from database import engine, get_db
-from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour, Admin
+from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour, Admin, UserUpdate
 from fpdf import FPDF
 
 load_dotenv()
@@ -355,3 +355,22 @@ def generate_pdf(db: Session = Depends(get_db)):
 def empty(db: Session = Depends(get_db)):
     db.query(models.StudentTable).delete()
     db.commit()
+
+
+@app.get('/update', response_class=HTMLResponse)
+def read(request: Request):
+    return templates.TemplateResponse("update.html", {"request": request})
+
+
+@app.post('/update')
+def update_record(request: Request, form_data: UserUpdate = Depends(UserUpdate.as_form), db: Session = Depends(get_db)):
+    db.query(models.StudentTable).filter(models.StudentTable.id == form_data.id).update({
+        models.StudentTable.full_name: form_data.full_name,
+        models.StudentTable.email_id: form_data.email_id,
+        models.StudentTable.graduation_completed: form_data.graduation_completed,
+        models.StudentTable.stream: form_data.stream,
+        models.StudentTable.cgpa: form_data.cgpa,
+        models.StudentTable.entrance_exam_score: form_data.entrance_exam_score
+    })
+    db.commit()
+    return templates.TemplateResponse("success.html", {"request": request, "details": "Data Updated Successfully"})

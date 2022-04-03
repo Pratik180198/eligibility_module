@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Student Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="{{ url_for('static', path='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script>
+        function check() {
+            var token = localStorage.getItem("email");
+
+            //              console.log(token);
+            if (token === null) {
+                window.location.replace("/login");
+            }
+        }</script>
+
+</head>
+
+<body onload="check();">
+    <div class="wrapper">
+        <div class="inner">
+            <form method="post" action="/update" enctype="multipart/form-data">
+                <h3>Update Details</h3>
+
+                <label class="form-group">
+                    <input type="number" class="form-control" name="id" min="1" required>
+                    <span>ID</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <input type="text" class="form-control" name="full_name" required>
+                    <span>Full Name</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <input type="email" class="form-control" name="email_id" required>
+                    <span>Email</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <span>Graduation Completed : </span>
+                    <span class="border"></span>
+                    <br>
+                    <br>
+
+                    <input type="radio" name="graduation_completed" value="Yes" required> Yes
+                    <input type="radio" name="graduation_completed" value="No" required> No
+                </label>
+
+                <label class="form-group">
+                    <span>Stream : </span>
+                    <span class="border"></span>
+                    <br>
+                    <br>
+                    <input type="radio" name="stream" value="IT" required> IT
+                    <input type="radio" name="stream" value="CS" required> CS
+                    <input type="radio" name="stream" value="Electronics" required> Electronics
+                    <input type="radio" name="stream" value="Mechanical" required> Mechanical
+                    <input type="radio" name="stream" value="Civil" required> Civil
+                </label>
+
+                <label class="form-group">
+                    <input type="number" class="form-control" name="cgpa" step="0.01" min="1" max="10" required>
+                    <span>CGPA</span>
+                    <span class="border"></span>
+                </label>
+
+                <label class="form-group">
+                    <input type="number" class="form-control" min="0" max="250" name="entrance_exam_score" required>
+                    <span>Entrance Exam Score </span>
+                    <span class="border"></span>
+                </label>
+
+
+                <button>Update Details <i class="zmdi zmdi"></i> </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -54,6 +54,7 @@
 					<caption>Student Details</caption>
 					<thead>
 						<tr>
+							<th>ID</th>
 							<th>Full Name</th>
 							<th>Email ID</th>
 							<th>Graduation</th>
@@ -66,6 +67,7 @@
 
 						{% for detail in details %}
 						<tr>
+							<td>{{ detail.id}}</td>
 							<td>{{ detail.full_name}}</td>
 							<td>{{ detail.email_id}}</td>
 							<td>{{ detail.graduation_completed}}</td>

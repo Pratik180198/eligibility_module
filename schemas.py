@@ -85,3 +85,25 @@ class Admin(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserUpdate(BaseModel):
+    id: int
+    full_name: str
+    email_id: str
+    graduation_completed: str
+    stream: str
+    cgpa: float
+    entrance_exam_score: int
+
+    @classmethod
+    def as_form(cls, id: int = Form(...),
+                full_name: str = Form(...),
+                email_id: str = Form(...),
+                graduation_completed: str = Form(...),
+                stream: str = Form(...),
+                cgpa: float = Form(...),
+                entrance_exam_score: int = Form(...)):
+        return cls(id=id, full_name=full_name, email_id=email_id, graduation_completed=graduation_completed,
+                   stream=stream, cgpa=cgpa,
+                   entrance_exam_score=entrance_exam_score)
