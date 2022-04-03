@@ -7,13 +7,13 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 import models
-from dotenv import load_dotenv
-import os
+# from dotenv import load_dotenv
+# import os
 from database import engine, get_db
 from schemas import UserDetails, StageOne, StageTwo, StageThree, StageFour, Admin, UserUpdate
 from fpdf import FPDF
 
-load_dotenv()
+# load_dotenv()
 
 app = FastAPI()
 
@@ -279,8 +279,10 @@ def send_mail(request: Request, db: Session = Depends(get_db)):
 
     stage_four_email = [detail.email_id for detail in details]
 
-    email_add = os.getenv("EMAIL_ADD")
-    password = os.getenv("PASSWORD")
+    # email_add = os.getenv("EMAIL_ADD")
+    # password = os.getenv("PASSWORD")
+    email_add = "eligibiltymodule@gmail.com"
+    password = "Pratik@2022"
 
     try:
         server = smtplib.SMTP('smtp.gmail.com:587')
