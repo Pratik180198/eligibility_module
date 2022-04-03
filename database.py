@@ -2,8 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql+mysqlconnector://root:root@localhost:3306/demo_fastapi"
+# DATABASE_URL = "mysql+mysqlconnector://root:root@localhost:3306/demo_fastapi"
+# engine = create_engine(DATABASE_URL)  # creating engine
+
+DATABASE_URL = "sqlite:///./demo_fastapi.db"
 engine = create_engine(DATABASE_URL)  # creating engine
+
 
 Base = declarative_base()
 

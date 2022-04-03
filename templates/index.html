@@ -84,36 +84,37 @@
         </footer>
         <script>
 
-            function callApi(method, url) {
-                $.ajax({
+        function callApi(method, url){
+         $.ajax({
 
                     method: method,
                     url: url
-                }).done(function (msg) {
-                    alert("Data Deleted Successfully");
-                })
-            }
+                    }).done(function(msg){
+                        alert("Data Deleted Successfully");
+                    })
+         }
 
             function logout() {
-                var isLogout = confirm('Are you sure to Logout');
-                if (isLogout) {
-                    window.localStorage.clear();
-                    return True;
-                }
-                return false;
+                var isLogout = confirm('You are about to Logout');
+                if (isLogout){
+                        window.localStorage.clear();
+                        return True;
+                        }
+                 return false;
 
-                // window.location.replace("http://127.0.0.1:8000/login");
+               // window.location.replace("http://127.0.0.1:8000/login");
             }
 
-            function delete_data() {
-                var isDelete = confirm('Are you sure to delete all the data');
-                if (isDelete) {
 
-                    callApi("DELETE", '/delete')
-                    return True
+            function delete_data(){
+            var isDelete = confirm('Are you sure to delete all the data');
+            if (isDelete){
 
-                }
-                return false;
+                callApi("DELETE",'/delete')
+                return True
+
+            }
+            return false;
             }
         </script>
 

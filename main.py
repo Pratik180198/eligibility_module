@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 import models
 from dotenv import load_dotenv
 import os
@@ -73,8 +74,8 @@ def handle_csv(request: Request, csvfile: UploadFile = File(...), db: Session = 
             else:
                 engine.execute(
                     "INSERT INTO "
-                    "demo_fastapi.students(full_name,email_id,graduation_completed,stream,cgpa,entrance_exam_score)"
-                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    "students(full_name,email_id,graduation_completed,stream,cgpa,entrance_exam_score)"
+                    "VALUES (?, ?, ?, ?, ?, ?)",
                     row.full_name, row.email_id, row.graduation_completed, row.stream, row.cgpa,
                     row.entrance_exam_score)
         return templates.TemplateResponse("success.html", {"request": request, "details": "CSV uploaded successfully"})
@@ -116,7 +117,7 @@ def grad_complete(request: Request, form_details: StageOne = Depends(StageOne.as
     try:
         if form_details.graduation_completed == 'both':
             details = db.query(models.StudentTable).filter(
-                models.StudentTable.graduation_completed.in_(['yes', 'no'])).all()
+                func.lower(models.StudentTable.graduation_completed).in_(['yes', 'no'])).all()
 
             db.query(models.StageOneTable).delete()
             db.commit()
@@ -140,7 +141,7 @@ def grad_complete(request: Request, form_details: StageOne = Depends(StageOne.as
             return templates.TemplateResponse("stage_one.html", {"request": request, "details": details})
 
         details = db.query(models.StudentTable).filter(
-            models.StudentTable.graduation_completed == form_details.graduation_completed).all()
+            func.lower(models.StudentTable.graduation_completed) == func.lower(form_details.graduation_completed)).all()
         if not details:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail=f'That type of data is not present')
@@ -364,6 +365,11 @@ def read(request: Request):
 
 @app.post('/update')
 def update_record(request: Request, form_data: UserUpdate = Depends(UserUpdate.as_form), db: Session = Depends(get_db)):
+    details = db.query(models.StudentTable).all()
+    list_id = [detail.id for detail in details]
+    if form_data.id not in list_id:
+        return "Invalid ID"
+
     db.query(models.StudentTable).filter(models.StudentTable.id == form_data.id).update({
         models.StudentTable.full_name: form_data.full_name,
         models.StudentTable.email_id: form_data.email_id,
